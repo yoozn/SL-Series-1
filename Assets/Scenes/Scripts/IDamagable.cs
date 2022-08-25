@@ -7,4 +7,5 @@ public interface IDamagable
 {
     //This function has to be included in all classes that inherit from IDamagable (LivingEntity)
     void TakeHit(float damage, RaycastHit hit);
+    void TakeDamage(float damage);
 }

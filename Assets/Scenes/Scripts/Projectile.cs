@@ -12,12 +12,28 @@ public class Projectile : MonoBehaviour
     //damage of projectile
     float damage = 1;
 
+    float lifeTime = 3;
     //Set speed of projectile
     public void SetSpeed(float newSpeed)
     {
         speed = newSpeed;
     }
 
+
+    private void Start()
+    {
+        Destroy(gameObject, lifeTime);
+
+        //With raycasts, if the bullet spawned inside an enemy, hit wouldnt register. This fixes that.
+        //Array of colliders, which is a list of all objects that overlaps with a instanced sphere, and are in the
+        //right collision mask.
+        Collider[] initialCollisions = Physics.OverlapSphere(transform.position, .1f, collisionMask);
+        //if the array is greater than 0, than put the first object collided with into the method OnHitObject
+        if (initialCollisions.Length > 0 )
+        {
+            OnHitObject(initialCollisions[0]);
+        }
+    }
     // Update is called once per frame
     void Update()
     {
@@ -53,6 +69,20 @@ public class Projectile : MonoBehaviour
         if (damagableObject != null )
         {
             damagableObject.TakeHit(damage, hit);
+        }
+        //Destroy projectile
+        GameObject.Destroy(gameObject);
+    }
+
+    //Function overload of above function. Same functionality, but doesn't need a raycast.
+    void OnHitObject(Collider c)
+    {
+        //Interface. if collided object has a IDamagable interface, set damagableObject to the colliders interface.
+        IDamagable damagableObject = c.GetComponent<IDamagable>();
+        //if collider has IDamagable interface, call it's TakeDamage method.
+        if (damagableObject != null)
+        {
+            damagableObject.TakeDamage(damage);
         }
         //Destroy projectile
         GameObject.Destroy(gameObject);

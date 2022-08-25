@@ -22,6 +22,11 @@ public class LivingEntity : MonoBehaviour, IDamagable
     //TakeHit function that applies to player and enemy classes.
     public void TakeHit(float damage, RaycastHit hit)
     {
+        TakeDamage(damage);
+    }
+
+    public void TakeDamage(float damage)
+    {
         health -= damage;
 
         //if no health is left, call die method
