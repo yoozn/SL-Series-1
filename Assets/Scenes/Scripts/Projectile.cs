@@ -12,6 +12,9 @@ public class Projectile : MonoBehaviour
     //damage of projectile
     float damage = 1;
 
+    //variable to compensate for if enemy and bullet move inside each other, and raycast again triggers when inside enemy, not detecting.
+    float skinWidth = .1f;
+
     float lifeTime = 3;
     //Set speed of projectile
     public void SetSpeed(float newSpeed)
@@ -53,7 +56,7 @@ public class Projectile : MonoBehaviour
         RaycastHit hit;
 
         //if raycast collides with right layer, and enable raycast to collide with triggers
-        if (Physics.Raycast(ray, out hit, moveDistance, collisionMask, QueryTriggerInteraction.Collide))
+        if (Physics.Raycast(ray, out hit, moveDistance + skinWidth, collisionMask, QueryTriggerInteraction.Collide))
         {
             //custom method that uses hit information
             OnHitObject(hit);
